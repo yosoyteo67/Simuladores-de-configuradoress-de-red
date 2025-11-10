@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Vodafone Station</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+        .header {
+            background: #e60000;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            height: 30px;
+            filter: brightness(0) invert(1);
+        }
+        .menu-bar {
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+        }
+        .nav-menu {
+            background: white;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .nav-item {
+            display: inline-block;
+            padding: 10px 20px;
+            color: #666;
+            text-decoration: none;
+            margin-right: 5px;
+            border-radius: 4px;
+        }
+        .nav-item.active {
+            background: #e60000;
+            color: white;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        .status-card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            background: #e60000;
+            color: white;
+        }
+        .device-list {
+            list-style: none;
+            padding: 0;
+        }
+        .device-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://www.vodafone.es/static/img/logo.svg" alt="Vodafone" class="logo">
+        <span style="color: white;">Cerrar sesión</span>
+    </div>
+    
+    <div class="menu-bar">
+        Vodafone Station
+    </div>
+
+    <div class="nav-menu">
+        <a href="#" class="nav-item active" onclick="showSection('estado')">Estado</a>
+        <a href="#" class="nav-item" onclick="showSection('internet')">Internet</a>
+        <a href="#" class="nav-item" onclick="showSection('wifi')">WiFi</a>
+        <a href="#" class="nav-item" onclick="showSection('dispositivos')">Dispositivos</a>
+        <a href="#" class="nav-item" onclick="showSection('configuracion')">Configuración</a>
+    </div>
+
+    <div class="container">
+        <div id="estado" class="section active">
+            <h2>Estado del Router</h2>
+            <div class="status-card">
+                <h3>Conexión a Internet</h3>
+                <p>Estado: Conectado</p>
+                <p>Velocidad: 1000 Mbps</p>
+                <p>Tiempo activo: 5 días, 2 horas</p>
+            </div>
+            
+            <div class="status-card">
+                <h3>WiFi</h3>
+                <p>Red 2.4GHz: Activa</p>
+                <p>Red 5GHz: Activa</p>
+                <p>Dispositivos conectados: 3</p>
+            </div>
+        </div>
+
+        <div id="wifi" class="section">
+            <h2>Configuración WiFi</h2>
+            <div class="status-card">
+                <h3>Red WiFi 2.4GHz</h3>
+                <div class="form-group">
+                    <label>Nombre de red:</label>
+                    <input type="text" value="Vodafone_2.4G">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" value="********">
+                </div>
+                <div class="form-group">
+                    <label>Canal:</label>
+                    <select>
+                        <option>Automático</option>
+                        <option>1</option>
+                        <option>6</option>
+                        <option>11</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="saveWiFiSettings()">Guardar cambios</button>
+            </div>
+        </div>
+
+        <div id="dispositivos" class="section">
+            <h2>Dispositivos conectados</h2>
+            <ul class="device-list">
+                <li class="device-item">
+                    <div>
+                        <strong>Smartphone Samsung</strong>
+                        <div>192.168.1.101</div>
+                    </div>
+                    <button class="btn" onclick="blockDevice('Smartphone Samsung')">Bloquear</button>
+                </li>
+                <li class="device-item">
+                    <div>
+                        <strong>Portátil Dell</strong>
+                        <div>192.168.1.102</div>
+                    </div>
+                    <button class="btn" onclick="blockDevice('Portátil Dell')">Bloquear</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function saveWiFiSettings() {
+            alert('Configuración WiFi guardada correctamente');
+        }
+
+        function blockDevice(deviceName) {
+            alert(`Dispositivo ${deviceName} bloqueado`);
+        }
+    </script>
+</body>
+</html>

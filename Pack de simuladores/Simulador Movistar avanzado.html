@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Router Movistar - Configuración Avanzada</title>
+    <style>
+        :root {
+            --movistar-blue: #019DF4;
+            --movistar-dark: #0B2739;
+            --sidebar-bg: #E8E8E8;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .header {
+            background: var(--movistar-blue);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-info {
+            display: flex;
+            gap: 20px;
+            font-size: 12px;
+        }
+
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 50px);
+        }
+
+        .sidebar {
+            width: 250px;
+            background: var(--sidebar-bg);
+            padding: 15px 0;
+            border-right: 1px solid #ddd;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .nav-group {
+            margin-bottom: 10px;
+        }
+
+        .nav-title {
+            padding: 8px 15px;
+            background: #019DF4;
+            color: white;
+            font-weight: bold;
+        }
+
+        .nav-item {
+            padding: 8px 15px 8px 30px;
+            color: #333;
+            text-decoration: none;
+            display: block;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background: #ddd;
+        }
+
+        .nav-item.active {
+            background: #fff;
+        }
+
+        .info-card {
+            background: white;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .btn {
+            background: var(--movistar-blue);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://www.movistar.es/estaticos/imagenes/common/logo-movistar.svg" alt="Movistar" height="30">
+        <div class="top-info">
+            <span>Login as: admin</span>
+            <span>Login time: 11:45</span>
+            <span>Version: 5.2.1</span>
+            <a href="#" style="color: white">Logout</a>
+        </div>
+    </div>
+
+    <div class="layout">
+        <div class="sidebar">
+            <div class="nav-group">
+                <div class="nav-title">Configuration</div>
+                <a class="nav-item active" onclick="showSection('lan')">LAN Setting</a>
+                <a class="nav-item" onclick="showSection('wan')">WAN Setting</a>
+                <a class="nav-item" onclick="showSection('wifi')">Wireless LAN</a>
+                <a class="nav-item" onclick="showSection('security')">Security</a>
+                <a class="nav-item" onclick="showSection('nat')">NAT</a>
+                <a class="nav-item" onclick="showSection('firewall')">Firewall</a>
+            </div>
+
+            <div class="nav-group">
+                <div class="nav-title">Status</div>
+                <a class="nav-item" onclick="showSection('device')">Device Info</a>
+                <a class="nav-item" onclick="showSection('statistics')">Statistics</a>
+                <a class="nav-item" onclick="showSection('dhcp')">DHCP Info</a>
+            </div>
+
+            <div class="nav-group">
+                <div class="nav-title">Management</div>
+                <a class="nav-item" onclick="showSection('users')">User Management</a>
+                <a class="nav-item" onclick="showSection('backup')">Backup/Restore</a>
+                <a class="nav-item" onclick="showSection('firmware')">Firmware Update</a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div id="lan" class="section">
+                <div class="info-card">
+                    <h2>LAN Settings</h2>
+                    <div class="form-group">
+                        <label>IP Address</label>
+                        <input type="text" value="192.168.1.1">
+                    </div>
+                    <div class="form-group">
+                        <label>Subnet Mask</label>
+                        <input type="text" value="255.255.255.0">
+                    </div>
+                    <div class="form-group">
+                        <label>DHCP Server</label>
+                        <select>
+                            <option>Enable</option>
+                            <option>Disable</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="saveConfig('lan')">Apply Changes</button>
+                </div>
+            </div>
+
+            <div id="wifi" class="section" style="display:none">
+                <div class="info-card">
+                    <h2>Wireless Settings</h2>
+                    <div class="form-group">
+                        <label>2.4GHz Network Name (SSID)</label>
+                        <input type="text" value="MOVISTAR_2G">
+                    </div>
+                    <div class="form-group">
+                        <label>5GHz Network Name (SSID)</label>
+                        <input type="text" value="MOVISTAR_5G">
+                    </div>
+                    <div class="form-group">
+                        <label>Security Mode</label>
+                        <select>
+                            <option>WPA3-Personal</option>
+                            <option>WPA2-Personal</option>
+                            <option>WPA/WPA2-Personal Mixed</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" value="********">
+                    </div>
+                    <button class="btn" onclick="saveConfig('wifi')">Apply Changes</button>
+                </div>
+            </div>
+
+            <div id="device" class="section" style="display:none">
+                <div class="info-card">
+                    <h2>Device Information</h2>
+                    <table>
+                        <tr>
+                            <th>Hardware Version</th>
+                            <td>HW2.0</td>
+                        </tr>
+                        <tr>
+                            <th>Software Version</th>
+                            <td>5.2.1</td>
+                        </tr>
+                        <tr>
+                            <th>MAC Address</th>
+                            <td>00:11:22:33:44:55</td>
+                        </tr>
+                        <tr>
+                            <th>System Uptime</th>
+                            <td>5 days 2 hours 15 minutes</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(id) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+            // Mostrar la sección seleccionada
+            document.getElementById(id).style.display = 'block';
+            // Actualizar menú
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function saveConfig(section) {
+            alert(`Configuración de ${section} guardada (simulado)`);
+        }
+    </script>
+</body>
+</html>

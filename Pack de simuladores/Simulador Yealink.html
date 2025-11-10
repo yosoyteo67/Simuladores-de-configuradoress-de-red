@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Simulador Yealink T21P E2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+        }
+        .header {
+            background-color: #0a563f;
+            padding: 10px;
+            color: white;
+        }
+        .nav-menu {
+            display: flex;
+            gap: 2px;
+            background: #084832;
+        }
+        .nav-item {
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .nav-item:hover {
+            background-color: #0b6b4d;
+        }
+        .nav-item.active {
+            background-color: #0b6b4d;
+        }
+        .container {
+            display: flex;
+            min-height: 80vh;
+        }
+        .sidebar {
+            width: 200px;
+            background-color: #f0f0f0;
+            padding: 10px;
+        }
+        .sidebar-item {
+            padding: 8px;
+            cursor: pointer;
+            color: #666;
+        }
+        .sidebar-item:hover {
+            background-color: #e0e0e0;
+        }
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            display: none;
+        }
+        .main-content.active {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        select, input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        button {
+            padding: 8px 20px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button.confirm {
+            background-color: #0a563f;
+            color: white;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .status-message {
+            padding: 10px;
+            margin: 10px 0;
+            display: none;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Yealink T21P E2 - Configuración</h2>
+        <div class="nav-menu">
+            <a href="#estado" class="nav-item" onclick="showSection('estado')">Estado</a>
+            <a href="#cuenta" class="nav-item" onclick="showSection('cuenta')">Cuenta</a>
+            <a href="#red" class="nav-item" onclick="showSection('red')">Red</a>
+            <a href="#funciones" class="nav-item" onclick="showSection('funciones')">Funciones</a>
+            <a href="#configuracion" class="nav-item" onclick="showSection('configuracion')">Configuración</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-item" onclick="showContent('hora-fecha')">Hora y fecha</div>
+            <div class="sidebar-item" onclick="showContent('red-basica')">Configuración de red</div>
+            <div class="sidebar-item" onclick="showContent('sip')">Configuración SIP</div>
+            <div class="sidebar-item" onclick="showContent('cuenta')">Cuenta SIP</div>
+        </div>
+
+        <div id="hora-fecha" class="main-content">
+            <h3>Configuración de Hora y Fecha</h3>
+            <div class="form-group">
+                <label>DHCP Time:</label>
+                <select id="dhcp-time">
+                    <option value="enabled">Activado</option>
+                    <option value="disabled">Desactivado</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Zona Horaria:</label>
+                <select id="timezone">
+                    <option value="1">+1 Spain, France, Germany, Italy</option>
+                    <option value="0">GMT London, Dublin</option>
+                    <option value="2">+2 Eastern Europe</option>
+                </select>
+            </div>
+            <div class="buttons">
+                <button class="confirm" onclick="saveConfig('hora-fecha')">Confirmar</button>
+                <button onclick="cancelConfig()">Cancelar</button>
+            </div>
+        </div>
+
+        <div id="red-basica" class="main-content">
+            <h3>Configuración de Red</h3>
+            <div class="form-group">
+                <label>Tipo de IP:</label>
+                <select id="ip-type">
+                    <option value="dhcp">DHCP</option>
+                    <option value="static">Estática</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Dirección IP:</label>
+                <input type="text" id="ip-address" placeholder="192.168.1.100">
+            </div>
+            <div class="buttons">
+                <button class="confirm" onclick="saveConfig('red')">Confirmar</button>
+                <button onclick="cancelConfig()">Cancelar</button>
+            </div>
+        </div>
+
+        <div class="status-message success" id="status-message"></div>
+    </div>
+
+    <script>
+        function showSection(section) {
+            const items = document.querySelectorAll('.nav-item');
+            items.forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function showContent(contentId) {
+            const contents = document.querySelectorAll('.main-content');
+            contents.forEach(content => content.style.display = 'none');
+            document.getElementById(contentId).style.display = 'block';
+        }
+
+        function saveConfig(section) {
+            const message = document.getElementById('status-message');
+            message.style.display = 'block';
+            message.textContent = `Configuración de ${section} guardada correctamente`;
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 3000);
+        }
+
+        function cancelConfig() {
+            if(confirm('¿Está seguro de que desea cancelar los cambios?')) {
+                location.reload();
+            }
+        }
+
+        // Mostrar la primera sección al cargar
+        window.onload = () => {
+            showContent('hora-fecha');
+            document.querySelector('.nav-item').classList.add('active');
+        }
+    </script>
+</body>
+</html>
